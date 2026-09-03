@@ -2,7 +2,9 @@ from dataclasses import dataclass
 from datetime import datetime
 import re
 
-
+"""
+Defines the Expense data class and handles field validation and dict conversion.
+"""
 @dataclass
 class Expense:
     date: str
