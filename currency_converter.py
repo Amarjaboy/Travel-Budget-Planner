@@ -2,8 +2,9 @@ import re
 import requests
 
 
-class CurrencyError(Exception):
-    """Raised when currency input or conversion fails."""
+class CurrencyError(Exception): 
+    """This handles all errors as a result of the conversion"""
+
 
 
 class CurrencyConverter:
