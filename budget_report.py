@@ -1,9 +1,9 @@
-import json 
+import json
 import csv
 
 
 class BudgetReport:
-#This is the class for the budget report
+    # This is the class for the budget report
 
     @staticmethod
     def save_trip_json(trip, filename="trip.json"):
@@ -15,14 +15,7 @@ class BudgetReport:
             "end_date": trip.end_date.isoformat(),
             "duration_days": trip.duration_days,
         }
-        # data = {
-        #     "home_currency": trip.home_currency,
-        #     "destination_currency": trip.destination_currency,
-        #     "amount": trip.amount,
-        #     "start_date": trip.start_date.isoformat(),
-        #     "end_date": trip.end_date.isoformat(),
-        #     "duration_days": trip.duration_days,
-        # }
+
         with open(filename, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4)
 
@@ -54,13 +47,19 @@ class BudgetReport:
             writer = csv.writer(file)
 
             writer.writerow([
+                "Date",
                 "Category",
-                "Amount"
+                "Description",
+                "Amount",
+                "Currency"
             ])
 
             for expense in expenses:
-                if hasattr(expense, "category"):
+                if hasattr(expense, "date"):
                     writer.writerow([
+                        expense.date,
                         expense.category,
-                        expense.amount
+                        expense.description,
+                        expense.amount,
+                        expense.currency
                     ])

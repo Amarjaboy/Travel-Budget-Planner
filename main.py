@@ -1673,13 +1673,46 @@ class TravelBudgetApp:
 
     def refresh_expense_total(self):
 
-        total = sum(
-            expense.amount
-            for expense in self.expenses
-        )
+        if not self.expenses:
+            self.expense_total_label.config(
+                text="Total: 0.00"
+            )
+            return
+
+        # If no trip has been calculated yet,
+        # show the total only when all expenses use the same currency.
+        if not self.current_trip:
+            currencies = {
+                expense.currency
+                for expense in self.expenses
+            }
+
+            if len(currencies) == 1:
+                currency = next(iter(currencies))
+                total = sum(
+                    expense.amount
+                    for expense in self.expenses
+                )
+
+                self.expense_total_label.config(
+                    text=f"Total: {total:,.2f} {currency}"
+                )
+            else:
+                self.expense_total_label.config(
+                    text="Total: Calculate trip first"
+                )
+
+            return
+
+        # Convert every expense into the trip's
+        # destination currency before adding them.
+        total = self.total_expenses_in_destination_currency()
 
         self.expense_total_label.config(
-            text=f"Total: {total:,.2f}"
+            text=(
+                f"Total: {total:,.2f} "
+                f"{self.current_trip.destination_currency}"
+            )
         )
 
     def save_expenses(self):
